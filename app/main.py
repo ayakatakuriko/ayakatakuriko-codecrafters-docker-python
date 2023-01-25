@@ -11,17 +11,13 @@ def main():
     if args[0] == "echo_stderr":
         args[0] = "echo"
         output_f = sys.stderr
-    elif args[0] == "exit":
-        exit_s = int(args[1])
     subprocess.run(["mkdir", "-p", "./temp/usr"])    
     subprocess.run(["cp", "-r","/usr/local", "./temp/usr/."])
     subprocess.run(["cp", "-r","/usr/bin", "./temp/usr/."])
     completed_process = subprocess.run(["chroot", "./temp", command, *args], capture_output=True)  
-    #completed_process = subprocess.run([command, *args], capture_output=True)
     
     print(completed_process.stdout.decode("utf-8").strip(), file=output_f)
-    exit(exit_s) 
-
+    exit(completed_process.returncode)
 
 if __name__ == "__main__":
     main()
